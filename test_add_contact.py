@@ -1,156 +1,27 @@
 # -*- coding: utf-8 -*-
-from selenium import webdriver
-from selenium.common.exceptions import NoSuchElementException
-from selenium.common.exceptions import NoAlertPresentException
-from selenium.webdriver.support.ui import Select
-import unittest
 from contact import Contact
+from application_contacts import ApplicationContacts
+import pytest
 
 
-
-def is_alert_present(self):
-    try:
-        self.driver.switch_to_alert()
-    except NoAlertPresentException as e:
-        return False
-    return True
+@pytest.fixture
+def app(request):
+    fixture = ApplicationContacts()
+    request.addfinalizer(fixture.destroy)
+    return fixture
 
 
-def is_element_present(self, how, what):
-        try:
-            self.wd.find_element(by=how, value=what)
-        except NoSuchElementException as e:
-            return False
-        return True
+def test_add_contact(app):
+    app.login( username="admin", password="secret")
+    app.create_new_contact(Contact( firstname="dfdfgh", lastname="ttttt", address="fghghjhkkvb", home="333333333",
+                            mobile="333333", work="1111111111", fax="111111111111111111111", email="rttyru@rtrt",
+                            email2="fgghjj", homepage="wwwfghgj"))
+    app.logout()
 
 
-class test_add_contact(unittest.TestCase):
-    def setUp(self):
-        self.wd = webdriver.Firefox()
-        self.wd.implicitly_wait(30)
-
-    def test_add_contact(self):
-        wd = self.wd
-        self.open_home_page(wd)
-        self.login(wd, username="admin", password="secret")
-        self.create_new_contact(wd, Contact(firstname="dfdfgh", middlename="rtrtt", lastname="ttttt", nickname="yyy",
-                                title="233", company="fgfghggj", address="fghghjhkkvb", home="333333333",
-                                mobile="333333", work="1111111111", fax="111111111111111111111", email="rttyru@rtrt",
-                                email2="fgghjj", homepage="wwwfghgj", byear="1999", ayear="2009", address2="dfgh",
-                                phone2="hjj2", notes="fgfhj", bmonth="option[value=\"February\"]",
-                                bday="option[value=\"17\"]", aday="option[value=\"20\"]",
-                                amonth="option[value=\"September\"]"))
-        self.return_to_home_page(wd)
-        self.logout(wd)
-
-    def test_add_empty_contact(self):
-        wd = self.wd
-        self.open_home_page(wd)
-        self.login(wd, username="admin", password="secret")
-        self.create_new_contact(wd, Contact(firstname="", middlename="", lastname="", nickname="",
-                                title="", company="", address="", home="",
-                                mobile="", work="", fax="", email="",
-                                email2="", homepage="", byear="", ayear="", address2="",
-                                phone2="", notes="", bmonth="option[value=\"\"]",
-                                bday="option[value=\"\"]", aday="option[value=\"0\"]",
-                                amonth="option[value=\"-\"]") )
-        self.return_to_home_page(wd)
-        self.logout(wd)
-
-    def logout(self, wd):
-        wd.find_element_by_link_text("Logout").click()
-
-    def return_to_home_page(self, wd):
-        wd.find_element_by_link_text("home").click()
-
-    def create_new_contact(self, wd, contact):
-        # create new contact
-        # fill contact form
-        wd.find_element_by_name("firstname").click()
-        wd.find_element_by_name("firstname").clear()
-        wd.find_element_by_name("firstname").send_keys(contact.firstname)
-        wd.find_element_by_name("middlename").click()
-        wd.find_element_by_name("middlename").clear()
-        wd.find_element_by_name("middlename").send_keys(contact.middlename)
-        wd.find_element_by_name("lastname").click()
-        wd.find_element_by_name("lastname").clear()
-        wd.find_element_by_name("lastname").send_keys(contact.lastname)
-        wd.find_element_by_name("nickname").click()
-        wd.find_element_by_name("nickname").clear()
-        wd.find_element_by_name("nickname").send_keys(contact.nickname)
-        wd.find_element_by_name("title").click()
-        wd.find_element_by_name("title").clear()
-        wd.find_element_by_name("title").send_keys(contact.title)
-        wd.find_element_by_name("company").click()
-        wd.find_element_by_name("company").clear()
-        wd.find_element_by_name("company").send_keys(contact.company)
-        wd.find_element_by_name("address").click()
-        wd.find_element_by_name("address").clear()
-        wd.find_element_by_name("address").send_keys(contact.address)
-        wd.find_element_by_name("home").click()
-        wd.find_element_by_name("home").clear()
-        wd.find_element_by_name("home").send_keys(contact.home)
-        wd.find_element_by_name("theform").click()
-        wd.find_element_by_name("mobile").click()
-        wd.find_element_by_name("mobile").clear()
-        wd.find_element_by_name("mobile").send_keys(contact.mobile)
-        wd.find_element_by_name("work").click()
-        wd.find_element_by_name("work").clear()
-        wd.find_element_by_name("work").send_keys(contact.work)
-        wd.find_element_by_name("fax").click()
-        wd.find_element_by_name("fax").clear()
-        wd.find_element_by_name("fax").send_keys(contact.fax)
-        wd.find_element_by_name("email").click()
-        wd.find_element_by_name("email").clear()
-        wd.find_element_by_name("email").send_keys(contact.email)
-        wd.find_element_by_name("email2").click()
-        wd.find_element_by_name("email2").clear()
-        wd.find_element_by_name("email2").send_keys(contact.email2)
-        wd.find_element_by_name("homepage").click()
-        wd.find_element_by_name("homepage").clear()
-        wd.find_element_by_name("homepage").send_keys(contact.homepage)
-        wd.find_element_by_name("bday").click()
-        wd.find_element_by_css_selector(contact.bday).click()
-        wd.find_element_by_name("bmonth").click()
-        wd.find_element_by_css_selector(contact.bmonth).click()
-        wd.find_element_by_name("byear").click()
-        wd.find_element_by_name("byear").clear()
-        wd.find_element_by_name("byear").send_keys(contact.byear)
-        wd.find_element_by_name("aday").click()
-        #wd.find_element_by_css_selector(aday).click()
-        wd.find_element_by_css_selector("[name=\"aday\"] > %s" % contact.aday).click()
-        wd.find_element_by_name("amonth").click()
-        wd.find_element_by_css_selector("[name=\"amonth\"] > %s" % contact.amonth).click()
-        wd.find_element_by_name("ayear").click()
-        wd.find_element_by_name("ayear").clear()
-        wd.find_element_by_name("ayear").send_keys(contact.ayear)
-        wd.find_element_by_name("address2").click()
-        wd.find_element_by_name("address2").clear()
-        wd.find_element_by_name("address2").send_keys(contact.address2)
-        wd.find_element_by_name("phone2").click()
-        wd.find_element_by_name("phone2").clear()
-        wd.find_element_by_name("phone2").send_keys(contact.phone2)
-        wd.find_element_by_name("notes").click()
-        wd.find_element_by_name("notes").clear()
-        wd.find_element_by_name("notes").send_keys(contact.notes)
-        # submit contact creation
-        wd.find_element_by_xpath("(//input[@name='submit'])[2]").click()
-
-    def login(self, wd, username, password):
-        wd.find_element_by_name("user").click()
-        wd.find_element_by_name("user").clear()
-        wd.find_element_by_name("user").send_keys(username)
-        wd.find_element_by_name("pass").click()
-        wd.find_element_by_name("pass").clear()
-        wd.find_element_by_name("pass").send_keys(password)
-        wd.find_element_by_xpath("//input[@value='Login']").click()
-
-    def open_home_page(self, wd):
-        wd.get("http://addressbook:8080/edit.php")
-
-    def tearDown(self):
-        self.wd.quit()
-
-
-if __name__ == "__main__":
-    unittest.main()
+def test_add_empty_contact(app):
+    app.login(username="admin", password="secret")
+    app.create_new_contact(Contact( firstname="", lastname="",
+                            address="", home="", mobile="", work="", fax="", email="",
+                            email2="", homepage=""))
+    app.logout()
