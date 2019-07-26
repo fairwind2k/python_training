@@ -1,10 +1,7 @@
 # -*- coding: utf-8 -*-
-import pytest
-from selenium import webdriver
-from selenium.common.exceptions import NoAlertPresentException, NoSuchElementException
 import unittest
-from group import Group
-from application import Application
+from model.group import Group
+from fixture.application import Application
 
 
 class test_add_group(unittest.TestCase):
