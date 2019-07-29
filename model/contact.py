@@ -12,3 +12,4 @@ class Contact:
         self.email = email
         self.email2 = email2
         self.homepage = homepage
+
