@@ -24,8 +24,8 @@ class ContactsHelper:
 
     def open_home_page(self):
         wd = self.app.wd
-        if not (wd.current_url.endswith("/addressbook:8080/")):
-            self.app.open_home_page()
+        if not (wd.current_url.endswith("/addressbook:8080/") and len(wd.find_elements_by_name("searchstring")) >0 ):
+            wd.get("http://addressbook:8080/")
 
     def delete_first_contact(self):
         wd = self.app.wd
