@@ -1,3 +1,6 @@
+from model.contact import Contact
+
+
 class ContactsHelper:
 
     def __init__(self, app):
@@ -86,3 +89,21 @@ class ContactsHelper:
         # submit modification
         wd.find_element_by_name("update").click()
         self.return_to_home_page()
+
+    def get_contacts_list(self):
+        wd = self.app.wd
+        self.open_home_page()
+        contacts = []
+        for element in wd.find_elements_by_name("entry"):
+            id = element.find_element_by_name("selected[]").get_attribute("value")
+            text = element.text
+            if len(text) > 0:
+                res = text.split(" ")
+                res_new = []
+                for i in res:
+                    i = i.strip()
+                    res_new.append(i)
+                contacts.append(Contact(lastname=res_new[0], firstname=res_new[1], id=id))
+            else:
+                contacts.append(Contact(lastname='', firstname='', id=id))
+        return contacts
