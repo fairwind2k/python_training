@@ -12,8 +12,8 @@ def test_edit_contact(app):
     contacts_data = Contact(firstname="Test_firstname", lastname="Test_lastname")
     contacts_data.id = old_contacts[0].id
     app.contacts.modify_first_contact(contacts_data)
+    assert len(old_contacts) == app.contacts.count_contacts()
     new_contacts = app.contacts.get_contacts_list()
-    assert len(old_contacts) == len(new_contacts)
     old_contacts[0] = contacts_data
     assert sorted(old_contacts, key=Contact.id_or_max) == sorted(new_contacts, key=Contact.id_or_max)
 
