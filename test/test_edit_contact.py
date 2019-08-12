@@ -12,7 +12,7 @@ def test_edit_contact(app):
         app.contacts.create_new_contact(contact)
     old_contacts = app.contacts.get_contacts_list()
     index = randrange(len(old_contacts))
-    contacts_data = Contact(firstname="Test_firstname", lastname="Test_lastname")
+    contacts_data = Contact(firstname="Mod", lastname="Mod")
     contacts_data.id = old_contacts[index].id
     app.contacts.modify_contact_by_index(index, contacts_data)
     assert len(old_contacts) == app.contacts.count_contacts()
