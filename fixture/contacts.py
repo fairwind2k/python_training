@@ -32,14 +32,23 @@ class ContactsHelper:
             wd.get("http://addressbook:8080/")
 
     def delete_first_contact(self):
+        self.delete_contact_by_index(0)
+
+    def delete_contact_by_index(self, index):
         wd = self.app.wd
-        # select first contact
-        wd.find_element_by_name("selected[]").click()
-        # submit deletion
+        self.select_contact_by_index(index)
         wd.find_element_by_xpath("//input[@value='Delete']").click()
         wd.switch_to_alert().accept()
         self.return_to_home_page()
         self.contact_cache = None
+
+    def select_contact_by_index(self, index):
+        wd = self.app.wd
+        wd.find_elements_by_name("selected[]")[index].click()
+
+    def select_first_contact(self):
+        wd = self.app.wd
+        wd.find_element_by_name("selected[]").click()
 
     def fill_contact_form(self, contact):
         wd = self.app.wd
@@ -61,29 +70,18 @@ class ContactsHelper:
             wd.find_element_by_name(contact_field_name).clear()
             wd.find_element_by_name(contact_field_name).send_keys(text)
 
-    def select_first_contact(self):
-        wd = self.app.wd
-        wd.find_element_by_name("selected[]").click()
-
-    # def edit_contact(self, contact):
-    #     wd = self.app.wd
-    #     self.open_home_page()
-    #     # edition
-    #     wd.find_element_by_css_selector("img[alt=\"Edit\"]").click()
-    #     self.fill_contact_form(contact)
-    #     # submit update
-    #     wd.find_element_by_xpath("(//input[@name='update'])[2]").click()
-    #     self.return_to_home_page()
-
     def count_contacts(self):
         wd = self.app.wd
         self.open_home_page()
         return len(wd.find_elements_by_name("selected[]"))
 
     def modify_first_contact(self, new_contact_data):
+        self.modify_contact_by_index(0, new_contact_data)
+
+    def modify_contact_by_index(self, index, new_contact_data):
         wd = self.app.wd
         self.open_home_page()
-        self.select_first_contact()
+        self.select_contact_by_index(index)
         # open modification form
         wd.find_element_by_css_selector("img[alt=\"Edit\"]").click()
         # fill group form
