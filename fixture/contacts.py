@@ -124,10 +124,9 @@ class ContactsHelper:
                 lastname = cells[1].text
                 firstname = cells[2].text
                 id = cells[0].find_element_by_tag_name("input").get_attribute("value")
-                all_phones = cells[5].text.splitlines()
+                all_phones = cells[5].text
                 self.contact_cache.append(Contact(lastname=lastname, firstname=firstname, id=id,
-                                                  homephone=all_phones[0], mobile=all_phones[1],
-                                                  workphone=all_phones[2], secondaryphone=all_phones[3]))
+                                                  all_phones_from_home_page=all_phones))
         return list(self.contact_cache)
 
         # alternative for text from cells
@@ -171,8 +170,8 @@ class ContactsHelper:
         self.open_contact_view_by_index(index)
         text = wd.find_element_by_id("content").text
         homephone = re.search("H: (.*)", text).group(1)
-        workphone = re.search("W: (.*)", text).group(1)
         mobile = re.search("M: (.*)", text).group(1)
+        workphone = re.search("W: (.*)", text).group(1)
         secondaryphone = re.search("P: (.*)", text).group(1)
-        return Contact(homephone=homephone, workphone=workphone, mobile=mobile,
+        return Contact(homephone=homephone, mobile=mobile, workphone=workphone,
                        secondaryphone=secondaryphone)
