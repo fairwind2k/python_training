@@ -1,5 +1,7 @@
 import re
 
+from more_itertools import strip
+
 from model.contact import Contact
 
 
@@ -68,6 +70,7 @@ class ContactsHelper:
         self.type_contact_text("fax", contact.fax)
         self.type_contact_text("email", contact.email)
         self.type_contact_text("email2", contact.email2)
+        self.type_contact_text("email3", contact.email3)
         self.type_contact_text("homepage", contact.homepage)
 
     def type_contact_text(self, contact_field_name, text):
@@ -98,22 +101,6 @@ class ContactsHelper:
 
     contact_cache = None
 
-    # def get_contacts_list(self):
-    #     if self.contact_cache is None:
-    #         wd = self.app.wd
-    #         self.open_home_page()
-    #         self.contact_cache = []
-    #         for element in wd.find_elements_by_name("entry"):
-    #             contact = []
-    #             for cell in element.find_elements_by_tag_name("td"):
-    #                 text = cell.text
-    #                 contact.append(text)
-    #             id = element.find_element_by_name("selected[]").get_attribute("value")
-    #             all_phones = contact[5].splitlines()
-    #             print(all_phones)
-    #             self.contact_cache.append(Contact(lastname=contact[1], firstname=contact[2], id=id, homephone=all_phones[0], mobile=all_phones[1], workphone=all_phones[2]))
-    #     return list(self.contact_cache)
-
     def get_contacts_list(self):
         if self.contact_cache is None:
             wd = self.app.wd
@@ -123,10 +110,13 @@ class ContactsHelper:
                 cells = element.find_elements_by_tag_name("td")
                 lastname = cells[1].text
                 firstname = cells[2].text
+                address = re.sub("\n", " ", cells[3].text)
+                all_e_mails = cells[4].text
                 id = cells[0].find_element_by_tag_name("input").get_attribute("value")
                 all_phones = cells[5].text
                 self.contact_cache.append(Contact(lastname=lastname, firstname=firstname, id=id,
-                                                  all_phones_from_home_page=all_phones))
+                                                  all_phones_from_home_page=all_phones, address=address,
+                                                  all_e_mails_from_home_page=all_e_mails))
         return list(self.contact_cache)
 
         # alternative for text from cells
@@ -154,16 +144,21 @@ class ContactsHelper:
     def get_contact_info_from_edit_page(self, index):
         wd = self.app.wd
         self.open_contact_to_edit_by_index(index)
-        firstname = wd.find_element_by_name("firstname").get_attribute("value")
-        lastname = wd.find_element_by_name("lastname").get_attribute("value")
+        firstname = wd.find_element_by_name("firstname").get_attribute("value").strip()
+        lastname = wd.find_element_by_name("lastname").get_attribute("value").strip()
+        address = ' '.join(wd.find_element_by_name("address").get_attribute("value").split())
         id = wd.find_element_by_name("id").get_attribute("value")
-        homephone = wd.find_element_by_name("home").get_attribute("value")
-        workphone = wd.find_element_by_name("work").get_attribute("value")
-        mobile = wd.find_element_by_name("mobile").get_attribute("value")
-        secondaryphone = wd.find_element_by_name("phone2").get_attribute("value")
+        homephone = wd.find_element_by_name("home").get_attribute("value").strip()
+        workphone = wd.find_element_by_name("work").get_attribute("value").strip()
+        mobile = wd.find_element_by_name("mobile").get_attribute("value").strip()
+        secondaryphone = wd.find_element_by_name("phone2").get_attribute("value").strip()
+        email = wd.find_element_by_name("email").get_attribute("value").strip()
+        email2 = wd.find_element_by_name("email2").get_attribute("value").strip()
+        email3 = wd.find_element_by_name("email3").get_attribute("value").strip()
         return Contact(firstname=firstname, lastname=lastname, id=id,
-                       homephone=homephone, workphone=workphone, mobile=mobile,
-                       secondaryphone=secondaryphone)
+                       address=address, homephone=homephone, workphone=workphone,
+                       mobile=mobile, secondaryphone=secondaryphone,
+                       email=email, email2=email2, email3=email3)
 
     def get_contact_from_view_page(self, index):
         wd = self.app.wd
