@@ -1,0 +1,6 @@
+{
+  "baseUrl": "http://addressbook:8080/",
+  "browser": "firefox",
+  "username": "admin",
+  "password": "secret"
+}
