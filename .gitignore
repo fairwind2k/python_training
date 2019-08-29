@@ -109,5 +109,7 @@ venv.bak/
 /fixture/application_contacts.py
 # mypy
 .mypy_cache/
+
+
 /test_add_group_2.py
 /fixture/application_contacts.py
