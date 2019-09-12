@@ -118,7 +118,7 @@ class ContactsHelper:
                 address = re.sub("\n", " ", cells[3].text)
                 all_e_mails = cells[4].text
                 id = cells[0].find_element_by_tag_name("input").get_attribute("value")
-                all_phones = cells[5].text
+                all_phones = re.sub("\n", "", cells[5].text)
                 self.contact_cache.append(Contact(lastname=lastname, firstname=firstname, id=id,
                                                   all_phones_from_home_page=all_phones, address=address,
                                                   all_e_mails_from_home_page=all_e_mails))
