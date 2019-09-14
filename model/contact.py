@@ -28,7 +28,9 @@ class Contact:
                                                            self.secondaryphone, self.all_phones_from_home_page, self.all_e_mails_from_home_page)
 
     def __eq__(self, other):
-        return (self.id is None or other.id is None or self.id == other.id) and (self.firstname is None or other.firstname is None or self.firstname == other.firstname) and (self.lastname is None or other.lastname is None or self.lastname == other.lastname)
+        return (self.id is None or other.id is None or self.id == other.id) and \
+               (self.firstname is None or other.firstname is None or self.firstname == other.firstname) and \
+               (self.lastname is None or other.lastname is None or self.lastname == other.lastname)
 
     def id_or_max(self):
         if self.id:

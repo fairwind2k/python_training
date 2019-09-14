@@ -13,7 +13,7 @@ class ContactsHelper:
     def open_contact_page(self):
         wd = self.app.wd
         if not (wd.current_url.endswith("/edit.php?id=") and len(wd.find_elements_by_name("update")) > 0):
-            wd.get("http://addressbook:8080/edit.php")
+            wd.get(self.app.base_url + "edit.php")
 
     def create_new_contact(self, contact):
         wd = self.app.wd
@@ -32,8 +32,8 @@ class ContactsHelper:
 
     def open_home_page(self):
         wd = self.app.wd
-        if not (wd.current_url.endswith("/addressbook:8080/") and len(wd.find_elements_by_name("searchstring")) >0 ):
-            wd.get("http://addressbook:8080/")
+        if not (wd.current_url.endswith(self.app.base_url) and len(wd.find_elements_by_name("searchstring")) >0 ):
+            wd.get(self.app.base_url)
 
     def delete_first_contact(self):
         self.delete_contact_by_index(0)
