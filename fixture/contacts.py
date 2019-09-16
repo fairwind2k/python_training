@@ -95,7 +95,7 @@ class ContactsHelper:
 
     def modify_contact_by_index(self, index, new_contact_data):
         wd = self.app.wd
-        self.open_home_page()
+        # self.app.open_home_page() - можно убрать этот метод, потому как есть в фикстуре application
         self.select_contact_by_index(index)
         # fill group form
         self.fill_contact_form(new_contact_data)
@@ -118,7 +118,7 @@ class ContactsHelper:
                 address = re.sub("\n", " ", cells[3].text)
                 all_e_mails = cells[4].text
                 id = cells[0].find_element_by_tag_name("input").get_attribute("value")
-                all_phones = re.sub("\n", "", cells[5].text)
+                all_phones = cells[5].text
                 self.contact_cache.append(Contact(lastname=lastname, firstname=firstname, id=id,
                                                   all_phones_from_home_page=all_phones, address=address,
                                                   all_e_mails_from_home_page=all_e_mails))
