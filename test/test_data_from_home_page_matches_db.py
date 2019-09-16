@@ -4,10 +4,9 @@ import re
 
 def test_name_on_home_page(app, db):
     ui_all_contacts = sorted(app.contacts.get_contacts_list(), key=Contact.id_or_max)
-    count_contacts = len(ui_all_contacts)
     all_contacts_from_db = sorted(db.get_contact_list(), key=Contact.id_or_max)
     # вытаскивает все объекты по очереди
-    for i in range(len(ui_all_contacts) ):
+    for i in range(len(ui_all_contacts)):
         assert ui_all_contacts[i].lastname == all_contacts_from_db[i].lastname
         assert ui_all_contacts[i].firstname == all_contacts_from_db[i].firstname
         assert ui_all_contacts[i].address == all_contacts_from_db[i].address
