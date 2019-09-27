@@ -23,7 +23,7 @@ class Contact:
         self.id = id
 
     def __repr__(self):
-        return "%s:%s:%s:%s;%s:%s:%s:%s;%s:%s:%s:%s:%s:%s:%s" % (self.id, self.firstname, self.lastname , self.address, self.homephone,
+        return "\n%s:%s:%s:%s;%s:%s:%s:%s;%s:%s:%s:%s:%s:%s:%s" % (self.id, self.firstname, self.lastname , self.address, self.homephone,
                       self.mobile, self.workphone, self.fax, self.email, self.email2, self.email3, self.homepage,
                                                            self.secondaryphone, self.all_phones_from_home_page, self.all_e_mails_from_home_page)
 

@@ -184,3 +184,47 @@ class ContactsHelper:
         wd.find_element_by_css_selector("div.msgbox")
         self.return_to_home_page()
         self.contact_cache = None
+
+    def add_contact_in_group(self, contact_id, group_id):
+        wd = self.app.wd
+        self.select_contact_by_id(contact_id)
+        self.find_group_by_index(group_id)
+        wd.find_element_by_name('add').click()
+        wd.find_element_by_css_selector("div.msgbox")
+        wd.find_element_by_xpath("//a[contains(@href, './?group=%s')]" % group_id).click()
+        self.return_to_home_page()
+        self.contact_cache = None
+
+    def find_group_by_index(self, id):
+        wd = self.app.wd
+        wd.find_element_by_name("to_group")
+        wd.find_element_by_xpath("(//option[@value='%s'])[2]" % id).click()
+
+    def open_select_group(self, group_id):
+        wd = self.app.wd
+        self.open_home_page()
+        wd.find_element_by_css_selector("select[name=\"group\"]").click()
+        wd.find_element_by_css_selector("option[value=\"%s\"]" % group_id).click()
+
+    def get_contact_in_selected_group(self, group_id):
+        if self.contact_cache is None:
+            wd = self.app.wd
+            self.open_select_group(group_id)
+            self.contact_cache = []
+            for element in wd.find_elements_by_name("entry"):
+                cells = element.find_elements_by_tag_name("td")
+                id = cells[0].find_element_by_tag_name("input").get_attribute("value")
+                lastname = cells[1].text
+                firstname = cells[2].text
+                self.contact_cache.append(Contact(id=id, firstname=firstname, lastname=lastname))
+        return list(self.contact_cache)
+
+    def remove_contact_from_group(self, group_id, contact_id):
+        wd = self.app.wd
+        self.open_select_group(group_id)
+        self.select_contact_by_id(contact_id)
+        wd.find_element_by_css_selector("input[name=\"remove\"]").click()
+        self.return_to_home_page()
+        self.contact_cache = None
+
+
