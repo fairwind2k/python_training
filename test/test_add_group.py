@@ -6,10 +6,13 @@ from model.group import Group
 
 def test_add_group(app, db, json_groups, check_ui):
     group = json_groups
+
     with allure.step('Given a group list'):
         old_groups = db.get_group_list()
+
     with allure.step('When I add a group %s to the list' % group):
         app.group.create(group)
+
     with allure.step('Then the new group list is equal to the old list with the added group'):
         new_groups = db.get_group_list()
         assert len(old_groups) + 1 == len(new_groups)
